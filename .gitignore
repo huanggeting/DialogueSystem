@@ -1,17 +1,35 @@
-Qwen/
-result_files/
-question_tmp/
+# AutoDL / Jupyter / Python 缓存
+.Trash-0/
+.autodl/
+.ipynb_checkpoints/
 __pycache__/
 *.pyc
 
-data/
-datasets/
-runs/
-outputs/
-checkpoints/
-weights/
+# 项目运行临时文件
+question_tmp/
+result_files/
+
+# 大模型和权重
+Qwen/
 *.pt
 *.pth
 *.ckpt
 *.bin
 *.safetensors
+*.onnx
+*.engine
+
+# 数据和输出
+data/
+datasets/
+runs/
+outputs/
+logs/
+checkpoints/
+weights/
+
+# 环境文件
+.env
+.venv/
+venv/
+env/
