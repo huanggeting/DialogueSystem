@@ -1,0 +1,420 @@
+[
+    {
+    "slot": "结节发现最早时间（年月日）",
+    "symptom": "结节发现最早时间（年月日）",
+    "question_type": "datetime",
+    "priority": 4,
+    "prompt":"请问最早是什么时候发现肺结节呢？",
+    "conditions": [
+      { "slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }
+    ],
+    "structure_format":{"slot":"结节发现最早时间（年月日）","value":{
+    "结节发现最早年份":"YYYY",
+    "结节发现最早月份":"MM",
+    "结节发现最早日":"DD"}},
+    "expectations":
+      },
+      {
+    "slot": "结节发现方式（体检/症状/病因）",
+    "symptom": "结节发现方式（体检/症状/病因）",
+    "question_type": "text",
+    "prompt":"是怎么发现肺结节的呢？",
+    "priority": 5,
+    "conditions": [{ "slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"结节发现方式（体检/症状/病因）","value":"体检/症状/病因/Unknown"}
+  },
+    {
+    "slot": "是否进行肺部CT检查",
+    "symptom": "是否进行肺部CT检查",
+    "question_type": "yes_no_unknown",
+    "prompt":"你进行过胸部CT检查吗？",
+    "priority": 6,
+    "conditions": [ {"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"是否进行肺部CT检查","value":"Ture/False/Unknown"}
+  },
+    {
+    "slot": "肺部CT检查检查时间",
+    "symptom": "肺部CT检查检查时间",
+    "question_type": "datetime",
+    "prompt":"请问您胸部CT是多久检查的呢?上一次检查时间是多久？",
+    "priority": 7,
+    "conditions": [{ "slot": "是否进行肺部CT检查", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"肺部CT检查检查时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"}
+  },
+    {
+    "slot": "结节发现的医院",
+    "symptom": "结节发现的医院",
+    "question_type": "text",
+    "priority": 8,
+    "prompt":"请问是在哪个医院检查发现的呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"结节发现的医院","value":"医院名称/当地医院/Unknown"}
+  },
+    {
+    "slot": "结节位置",
+    "symptom": "结节位置",
+    "question_type": "text",
+    "priority": 9,
+    "prompt":"结节在哪里呢？是在左肺还是右肺？还是双肺都有？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"结节位置","value":"左肺/右肺/左肺，右肺/Unknown"}
+  },
+    {
+    "slot": "肺结节数量",
+    "symptom": "肺结节数量",
+    "question_type": "number",
+    "priority": 10,
+    "prompt":"有多少个肺结节呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"肺结节数量","value":"number/Unknown"}
+  },
+    {
+    "slot": "最大的肺结节直径",
+    "symptom": "最大的肺结节直径",
+    "question_type": "number",
+    "priority": 11,
+    "prompt":"最大的肺结节直径多少厘米（cm）呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"最大的肺结节直径","value":"0.1-50厘米/Unknown"}
+  },
+{
+    "slot": "是否咨询过医生",
+    "symptom": "是否咨询过医生",
+    "question_type": "yes_no_unknown",
+    "priority": 12,
+    "prompt":"发现结节后有咨询过医生吗?",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"是否咨询过医生","value":"True/False/Unknown"}
+  },
+    {
+    "slot": "咨询医生关于肺结节的内容",
+    "symptom": "咨询医生关于肺结节的内容",
+    "question_type": "text",
+    "priority": 13,
+    "prompt":"咨询的医生怎么说呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"咨询医生关于肺结节的内容","value":""}
+  },
+    {
+    "slot": "医生建议多久复查",
+    "symptom": "医生建议多久复查",
+    "question_type": "text",
+    "priority": 14,
+    "prompt":"咨询的医生建议您多久复查一次呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"医生建议多久复查","value":""}
+  },
+    {
+    "slot": "如何复查",
+    "symptom": "如何复查",
+    "question_type": "text",
+    "priority": 15,
+    "prompt":"后来呢？之后您如何复查的呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"如何复查","value":""}
+  },
+    {
+    "slot": "复查结果",
+    "symptom": "复查结果",
+    "question_type": "text",
+    "priority": 16,
+    "prompt":"复查的结果如何呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"复查结果","value":""}
+      },
+    {
+    "slot": "用药情况",
+    "symptom": "用药情况",
+    "question_type": "yes_no_unknown",
+    "priority": 17,
+    "prompt":"有没有吃过什么药？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"用药情况","value":"True/False/Unknown"}
+    },
+    {
+    "slot": "药物名称",
+    "symptom": "药物名称",
+    "question_type": "text",
+    "priority": 18,
+    "prompt":"药叫什么名字呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "用药情况","operator": "=","value": "True" }],
+    "structure_format":{"slot":"药物名称","value":"药物名称/Unknown"}
+      },
+    {
+    "slot": "用药时长",
+    "symptom": "用药时长",
+    "question_type": "duration",
+    "priority": 19,
+    "prompt":"吃了多久的药呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "用药情况","operator": "=","value": "True" }],
+    "structure_format":{"slot":"用药时长","value":"时间段/Unknown"}
+      },
+    {
+    "slot": "吃药频率",
+    "symptom": "吃药频率",
+    "question_type": "text",
+    "priority": 20,
+    "prompt":"吃药的频率是多少呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "用药情况","operator": "=","value": "True" }],
+    "structure_format":{"slot":"吃药频率","value":"吃药频率/Unknown"}
+      },
+    {
+    "slot": "用药后的结节变化",
+    "symptom": "用药后的结节变化",
+    "question_type": "text",
+    "priority": 21,
+    "prompt":"吃药以后复查结节有无变化呢？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "用药情况","operator": "=","value": "True" }],
+    "structure_format":{"slot":"用药后的效果","value":"用药后结节变化/Unknown"}
+      },
+    {
+    "slot": "额外的处理",
+    "symptom": "额外的处理",
+    "question_type": "yes_no_unknown",
+    "priority": 22,
+    "prompt":"有没有自行做过什么处理？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"额外的处理","value":"True/False/Unknown"}
+      },
+    {
+    "slot": "额外处理方式",
+    "symptom": "额外处理方式",
+    "question_type": "text",
+    "priority": 23,
+    "prompt":"具体处理方式是什么，比如：中医治疗，服用药物",
+    "conditions": [{ "slot": "额外的处理", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"额外处理方式","value":"中医治疗/服用药物/其他额外处理方式"}
+      },
+    {
+    "slot": "是否要做肺结节手术",
+    "symptom": "是否要做肺结节手术",
+    "question_type": "yes_no_unknown",
+    "priority": 24,
+    "prompt":"本次就诊是来做肺结节手术的吗？",
+    "conditions": [{"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"是否要做肺结节手术","value":"True/False/Unknown"}
+      },
+    
+    
+    {
+    "slot": "发现结节时的症状",
+    "symptom": "发现结节时的症状",
+    "question_type": "text",
+    "priority": 25,
+    "prompt":"发现肺结节时有没有什么症状呢？比如咳嗽、咳痰、咯血、胸痛、呼吸困难等。",
+    "conditions": [],
+    "structure_format":{"slot":"发现结节时的症状","value":"症状/无症状"}
+      },
+    {
+    "slot": "现在的症状",
+    "symptom": "现在的症状",
+    "question_type": "text",
+    "priority": 26,
+    "prompt":"现在有什么症状吗？",
+    "conditions": [],
+    "structure_format":{"slot":"现在的症状","value":"咳嗽/咳痰/咯血/胸痛/呼吸困难/无症状"}
+      }, 
+    {
+    "slot": "咳嗽开始时间",
+    "symptom": "咳嗽开始时间",
+    "question_type": "datetime",
+    "priority": 27,
+    "prompt":"咳嗽是什么时候开始的呢？",
+    "conditions": [{ "slot": "现在的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"咳嗽开始时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"}
+      },
+    {
+    "slot": "咳嗽频率",
+    "symptom": "咳嗽频率",
+    "question_type": "text",
+    "priority": 28,
+    "prompt":"咳嗽得厉害吗？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"咳嗽频率","value":"程度（0-10）"}
+      },
+    {
+    "slot": "咳嗽情况",
+    "symptom": "咳嗽情况",
+    "question_type": "text",
+    "priority": 29,
+    "prompt":"是一直咳还是偶尔咳？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"咳嗽情况","value":"一直咳/偶尔咳"}
+      },
+    {
+    "slot": "咳嗽加重或者减轻情况",
+    "symptom": "咳嗽加重或者减轻情况",
+    "question_type": "text",
+    "priority": 30,
+    "prompt":"咳嗽有没有在什么情况下加重或减轻？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"咳嗽情况","value":"天气影响/饮食影响/身体姿势影响"}
+      },
+    {
+        "slot": "是否咳痰",
+        "symptom": "是否咳痰",
+        "question_type": "yes_no_unknown",
+        "priority": 31,
+        "prompt":"请问有痰吗？",
+        "conditions": [],
+        "structure_format":{"slot":"是否咳痰","value":"True/False/Unknown"}
+      },
+    {
+        "slot": "痰液的颜色",
+        "symptom": "痰液的颜色",
+        "question_type": "text",
+        "priority": 32,
+        "prompt":"痰是什么颜色的？",
+        "conditions": [{ "slot": "是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"痰液的颜色","value":"黄色或黄绿色脓痰/铁锈色痰/粉红色泡沫痰/绿色痰/黑色痰/鲜红色或痰中带血/Unknown"}
+      },
+    {
+        "slot": "痰液的量",
+        "symptom": "痰液的量",
+        "question_type": "text",
+        "priority": 33,
+        "prompt":"痰的量多吗？",
+        "conditions": [{ "slot": "是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"痰液的量","value":"多/少"}
+      },
+    {
+        "slot": "痰液是否有血丝",
+        "symptom": "痰液是否有血丝",
+        "question_type": "yes_no_unknown",
+        "priority": 34,
+        "prompt":"痰里边有没有血丝呢？",
+        "conditions": [{ "slot": "是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"痰液是否有血丝","value":"True/False/Unknown"}
+      },
+    {
+        "slot": "痰液血丝的量",
+        "symptom": "痰液血丝的量",
+        "question_type": "text",
+        "priority": 35,
+        "prompt":"血多不多呢？",
+        "conditions": [{ "slot": "痰液是否有血丝","operator": "=","value": "True" }],
+        "structure_format":{"slot":"痰液血丝的量","value":"多/少"}
+      },
+    {
+    "slot": "胸痛开始时间",
+    "symptom": "胸痛开始时间",
+    "question_type": "datetime",
+    "priority": 36,
+    "prompt":"胸痛是什么时候开始的呢？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"胸痛开始时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"}
+      },
+    {
+    "slot": "胸痛具体部位",
+    "symptom": "胸痛具体部位",
+    "question_type": "text",
+    "priority": 37,
+    "prompt":"胸痛的具体部位是哪里呢？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"胸痛具体部位","value":"左/右/两侧的肩/背/腰/胸壁/胸内"}
+      },
+    {
+    "slot": "其他部位疼痛",
+    "symptom": "其他部位疼痛",
+    "question_type": "text",
+    "priority": 38,
+    "prompt":"还有哪里痛呢？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"其他部位疼痛","value":"身体部位/无地方疼痛"}
+      },
+    {
+    "slot": "胸痛类型",
+    "symptom": "胸痛类型",
+    "question_type": "text",
+    "priority": 39,
+    "prompt":"胸痛是什么样的疼痛呢？是牵扯痛、针刺样痛、钝痛、还是隐隐作痛？",
+    "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"胸痛类型","value":"牵扯痛/针刺样痛/钝痛/隐隐作痛"}
+      },
+    {
+        "slot": "胸痛程度",
+        "symptom": "胸痛程度",
+        "question_type": "text",
+        "priority": 40,
+        "prompt":"疼痛的程度怎么样呢？是否剧烈呢？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"胸痛程度","value":"胸痛程度（0-10分）"}
+      },
+    {
+        "slot": "胸痛发作频率",
+        "symptom": "胸痛发作频率",
+        "question_type": "text",
+        "priority": 41,
+        "prompt":"胸痛发作的频率大概是怎样的呢？是一直痛吗，还是一阵一阵的？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"胸痛发作频率","value":"一直痛/一阵一阵痛"}
+      },
+    {
+        "slot": "活动后胸痛程度",
+        "symptom": "活动后胸痛程度",
+        "question_type": "text",
+        "priority": 42,
+        "prompt":"活动或运动后胸痛会加重吗？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"活动后胸痛程度","value":"加重/没有加重"}
+      },
+    {
+        "slot": "休息后胸痛程度",
+        "symptom": "休息后胸痛程度",
+        "question_type": "text",
+        "priority": 43,
+        "prompt":"休息后胸痛会缓解吗？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"休息后胸痛程度","value":"缓解/没有缓解"}
+      },
+    {
+        "slot": "呼吸困难开始时间",
+        "symptom": "呼吸困难开始时间",
+        "question_type": "datetime",
+        "priority": 44,
+        "prompt":"气紧是什么时候开始的呢？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"呼吸困难开始时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"}
+      },
+    {
+        "slot": "气紧情况时间",
+        "symptom": "气紧情况时间",
+        "question_type": "datetime",
+        "priority": 45,
+        "prompt":"什么时候会出现气紧呢？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"气紧情况时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"}
+      },
+    {
+        "slot": "气紧减轻情况",
+        "symptom": "气紧减轻情况",
+        "question_type": "text",
+        "priority": 46,
+        "prompt":"有没有什么情况下会减轻？",
+        "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"气紧减轻情况","value":"天气影响/饮食影响/身体姿势影响"}
+      },
+    {
+        "slot": "是否咯血",
+        "symptom": "是否咯血",
+        "question_type": "yes_no_unknown",
+        "priority": 47,
+        "prompt":"你有咯血吗？",
+        "conditions": [],
+        "structure_format":{"slot":"是否咯血","value":"True/False/Unknown"}
+      },
+]

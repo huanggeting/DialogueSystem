@@ -1,0 +1,41 @@
+{
+    "patient": {
+        "患者姓名": "张三",
+        "性别": "女",
+        "患者年龄": "60"
+    },
+    "models": {
+        "normal": "Qwen/Qwen3-8B",
+        "awq": "Qwen/Qwen3-8B-AWQ",
+        "qwen14b": "Qwen/Qwen3-14B"
+    },
+    "template_dir": "question_logic",
+    "result_dir": "result_files",
+    "sections": [
+        {
+            "name": "present_history",
+            "template_file": "present_history.json"
+        },
+        {
+            "name": "past_history",
+            "template_file": "past_history.json"
+        },
+        {
+            "name": "personal_history",
+            "template_file": "personal_history.json"
+        },
+        {
+            "name": "period_history",
+            "template_file": "period_history.json",
+            "enabled_for_female_only": true
+        },
+        {
+            "name": "marital_history",
+            "template_file": "marital_history.json"
+        },
+        {
+            "name": "family_history",
+            "template_file": "family_history.json"
+        }
+    ]
+}

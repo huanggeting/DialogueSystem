@@ -1,0 +1,36 @@
+# 大模型文件夹
+Qwen/
+
+# Python 缓存
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 临时结果
+result_files/
+question_tmp/
+
+# 环境文件
+.venv/
+venv/
+env/
+.env
+
+# 日志和输出
+logs/
+outputs/
+runs/
+
+# 模型权重
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+
+# 压缩包
+*.zip
+*.tar
+*.tar.gz
+*.rar

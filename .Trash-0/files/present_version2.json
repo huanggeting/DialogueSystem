@@ -1,0 +1,120 @@
+{
+    "身份与来因":{
+        "questions":[
+            {
+            "slot": "受访者是否为病患本人",
+            "question_type": "yes_no_unknown",
+            "sub_priority": 1,
+            "prompt":"您好。为了更好地了解您的病情，我现在需要详细询问您的病史，请您配合一下。请问是[患者姓名]本人吗？",
+            "conditions": []
+          },
+            {
+            "slot": "受访者与患者的关系",
+            "question_type": "text",
+            "sub_priority": 2,
+            "prompt":"请问您和患者[患者姓名]是什么关系呢?",
+            "conditions": [{"slot": "被问者是否为病患本人","operator": "=","value": "False"}]
+          },
+            {
+            "slot": "本次来医院的原因",
+            "question_type": "object",
+            "sub_priority": 3,
+            "prompt":"请问这次患者来医院是什么原因呢？",
+            "conditions": []
+          }
+        ],
+        "priority":1
+    },
+    "肺结节主线":{
+        "questions":[
+            {
+                "slot": "结节发现最早时间（年月日）",
+                "question_type": "datetime",
+                "sub_priority": 1,
+                "prompt":"请问最早是什么时候发现肺结节呢？",
+                "conditions": [
+                  { "slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }
+                ]
+              },
+                  {
+                "slot": "结节发现方式（体检/症状/病因）",
+                "question_type": "text",
+                "prompt":"是通过体检发现肺结节的吗？还是其他方式？比如症状还是病因？",
+                "sub_priority": 2,
+                "conditions": [{ "slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }]
+              },
+                {
+                "slot": "是否进行肺部CT检查",
+                "question_type": "yes_no_unknown",
+                "prompt":"你进行过胸部CT检查吗？",
+                "sub_priority": 3,
+                "conditions": [ {"slot": "本次来医院的原因.本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }]
+              }
+        ],
+        "priority":2
+    },
+    "发现肺结节时症状":{
+        "questions":[
+            {
+                "slot": "发现结节时的症状",
+                "question_type": "text",
+                "sub_priority": 1,
+                "prompt":"发现肺结节时有没有什么症状呢？比如咳嗽、咳痰、咯血、胸痛、呼吸困难等。",
+                "conditions": []
+              }
+        ],
+        "priority":3
+    },
+    "当前症状":{
+        "questions":[
+            {
+            "slot": "现在的症状",
+            "question_type": "text",
+            "sub_priority": 1,
+            "prompt":"现在有什么症状吗？",
+            "conditions": []
+          },
+            {
+            "slot": "咳嗽开始时间",
+            "question_type": "datetime",
+            "sub_priority": 2,
+            "prompt":"咳嗽是什么时候开始的呢？",
+            "conditions": [{ "slot": "现在的症状", "operator": "contains", "value": "咳嗽" }]
+          },
+            {
+            "slot": "咳嗽频率",
+            "question_type": "text",
+            "sub_priority": 3,
+            "prompt":"咳嗽得厉害吗？",
+            "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }]
+          },
+            {
+            "slot": "咳嗽情况",
+            "question_type": "text",
+            "sub_priority": 4,
+            "prompt":"是一直咳还是偶尔咳？",
+            "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }]
+          },
+            {
+            "slot": "咳嗽加重或者减轻情况",
+            "question_type": "text",
+            "sub_priority": 5,
+            "prompt":"咳嗽有没有在什么情况下加重或减轻？",
+            "conditions": [{ "slot": "发现结节时的症状", "operator": "contains", "value": "咳嗽" }]
+          }
+        ],
+        "priority":4
+    },
+    "一般情况":{
+        "questions":[
+            {
+            "slot": "精神状态变化",
+            "question_type": "text",
+            "sub_priority": 1,
+            "prompt":"从发现肺结节以来，您的精神状态好不好呢？",
+            "conditions": []
+          }
+        ],
+         "priority":5
+    }
+}

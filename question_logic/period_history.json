@@ -1,0 +1,119 @@
+[
+  {
+    "slot": "患者初次月经年龄",
+    "symptom": "患者初次月经年龄",
+    "question_type": "text",
+    "priority": 1,
+    "prompt": "请问患者是几岁来的月经？",
+    "conditions": [],
+    "structure_format": {"slot": "患者初次月经年龄","value": ""},
+    "expectations": "根据患者/患者家属的回答，提取出患者初次来月经的年龄。如果用户说不知道，可以填不详。"
+  },
+  {
+    "slot": "患者是否绝经",
+    "symptom": "患者是否绝经",
+    "question_type": "yes_no_unknown",
+    "priority": 2,
+    "prompt": "患者现在绝经了吗？",
+    "conditions": [
+      { "slot": "是否已经达到可能绝经年龄", "operator": "=", "value": "True" }
+    ],
+    "structure_format": {
+      "slot": "患者是否绝经",
+      "value": "True / False / Unknown"
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者是否绝经。"
+  },
+  {
+    "slot": "患者绝经年龄",
+    "symptom": "患者绝经年龄",
+    "question_type": "age",
+    "priority": 3,
+    "prompt": "患者多少岁绝经的呢？",
+    "conditions": [
+      { "slot": "患者是否绝经", "operator": "=", "value": "True" }
+    ],
+    "structure_format": {
+      "slot": "患者绝经年龄",
+      "value": "整数(岁) / Unknown"
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者绝经的年龄。"
+  },
+  {
+    "slot": "患者两次月经间隔时间",
+    "symptom": "患者两次月经间隔时间",
+    "question_type": "text",
+    "priority": 4,
+    "prompt": "患者两次月经大概间隔多久呢？",
+    "conditions": [
+      { "slot": "患者是否绝经", "operator": "=", "value": "False" }
+    ],
+    "structure_format": {
+      "slot": "患者两次月经间隔时间",
+      "value": ""
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者两次月经间隔时间。允许xxx多天的表述。"
+  },
+  {
+    "slot": "患者月经一次持续时间",
+    "symptom": "患者月经一次持续时间",
+    "question_type": "duration",
+    "priority": 5,
+    "prompt": "患者月经每次来几天？",
+    "conditions": [
+      { "slot": "患者是否绝经", "operator": "=", "value": "False" }
+    ],
+    "structure_format": {
+      "slot": "患者月经一次持续时间",
+      "value": "整数(天) / Unknown"
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者月经一次持续时间。允许xxx多天的表述。"
+  },
+  {
+    "slot": "患者最近一次月经时间",
+    "symptom": "患者最近一次月经时间",
+    "question_type": "datetime",
+    "priority": 6,
+    "prompt": "患者最近一次月经是几月几日开始的？",
+    "conditions": [
+      { "slot": "患者是否绝经", "operator": "=", "value": "False" }
+    ],
+    "structure_format": {
+      "slot": "患者最近一次月经时间",
+      "value": ""
+    },
+    "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+  {
+    "slot": "患者月经量、颜色、性质详细情况",
+    "symptom": "患者月经量、颜色、性质详细情况",
+    "question_type": "text",
+    "priority": 7,
+    "prompt": "患者月经的量、颜色、性质有没有什么问题呢？",
+    "conditions": [
+      { "slot": "患者是否绝经", "operator": "=", "value": "False" }
+    ],
+    "structure_format": {
+      "slot": "患者月经量、颜色、性质详细情况",
+      "value": {
+        "量": "多 / 中 / 少",
+        "颜色": "鲜红 / 暗红 / 暗褐",
+        "性质": "正常 / 异常"
+      }
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者月经量、颜色、性质详细情况。月经量有问题，要提及量多/少.月经颜色有问题，要提及具体的颜色。"
+  },
+   {
+    "slot": "患者是否存在痛经",
+    "symptom": "患者是否存在痛经",
+    "question_type": "yes_no_unknown",
+    "priority": 8,
+    "prompt": "患者有没有经常痛经？",
+    "conditions": [],
+    "structure_format": {
+      "slot": "患者是否存在痛经",
+      "value": "True / False / Unknown"
+    },
+    "expectations": "根据患者/患者家属的回答，提取出患者是否存在痛经。"
+  } 
+]

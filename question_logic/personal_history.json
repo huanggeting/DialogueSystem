@@ -1,0 +1,126 @@
+[
+  {
+    "slot": "患者长期居住地",
+    "symptom": "患者长期居住地",
+    "question_type": "address",
+    "priority": 1,
+    "prompt":"患者长期在哪里居住呢？",
+    "conditions": [],
+    "structure_format":{"slot":"患者长期居住地","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者长期居住地。长期居住地可以是本地/外地，城市/农村。"
+  },
+    {
+    "slot": "患者是否有抽烟习惯",
+    "symptom": "患者是否有抽烟习惯",
+    "question_type": "yes_no_unknown",
+    "priority": 2,
+    "prompt":"请问还在之前有没有抽烟呢？",
+    "conditions": [],
+    "structure_format":{"slot":"患者是否有抽烟习惯","value":"True/ False/ Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者患者是否有抽烟习惯。吸烟是导致肺癌、慢阻肺、心血管疾病的主要危险因素。吸烟年限和每天吸烟量可以换算成“吸烟指数”（支/天 × 年数），吸烟指数 ≥400 提示重度吸烟，与肺癌风险高度相关。戒烟后，心肺疾病的风险会逐渐下降，但需要数年时间才能接近非吸烟者水平。"
+  },
+    {
+    "slot": "患者抽烟时间",
+    "symptom": "患者抽烟时间",
+    "question_type": "text",
+    "priority": 3,
+    "prompt":"患者抽烟有多少年了呢？",
+    "conditions": [
+      { "slot": "患者是否有抽烟习惯", "operator": "=", "value": "True" }
+    ],
+    "structure_format":{"slot":"患者抽烟时间","value":"时间/Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者的抽烟时间。"
+  },
+  {
+    "slot": "患者每天抽烟支数",
+    "symptom": "患者每天抽烟支数",
+    "question_type": "text",
+    "prompt":"患者每天要抽多少支呢？",
+    "priority": 4,
+    "conditions": [{ "slot": "患者是否有抽烟习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者每天抽烟支数","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者每天抽烟的支数。"
+  },
+    {
+    "slot": "患者是否戒烟",
+    "symptom": "患者是否戒烟",
+    "question_type": "yes_no_unknown",
+    "priority": 5,
+    "prompt":"请问患者现在戒烟了吗？",
+    "conditions": [{ "slot": "患者是否有抽烟习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者是否戒烟","value":"True/ False/ Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者患者是否戒烟。"
+  },
+    {
+    "slot": "患者戒烟时间",
+    "symptom": "患者戒烟时间",
+    "question_type": "text",
+    "priority": 6,
+    "prompt":"患者到现在戒烟多久了呢？",
+    "conditions": [{ "slot": "患者是否有抽烟习惯", "operator": "=", "value": "True" },
+                  { "slot": "患者是否戒烟", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者戒烟时间","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者的戒烟时间。"
+  },
+    {
+    "slot": "患者是否有喝酒的习惯",
+    "symptom": "患者是否有喝酒的习惯",
+    "question_type": "yes_no_unknown",
+    "priority": 7,
+    "prompt":"请问患者喝不喝酒呢？",
+    "conditions": [],
+    "structure_format":{"slot":"患者是否有喝酒的习惯","value":"True/ False/ Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者患者是否有喝酒习惯。长期大量饮酒可导致肝硬化、酒精性肝病、胰腺炎，还与口腔癌、食管癌等消化道肿瘤相关。酒精摄入常换算成“酒精当量”（1两白酒≈15g酒精），男性每天 <25g，女性 <15g 较安全。戒酒后，肝脏有一定修复能力，但长期酗酒可能造成不可逆损伤。"
+  },
+    {
+    "slot": "患者喝酒时间",
+    "symptom": "患者喝酒时间",
+    "question_type": "text",
+    "priority": 8,
+    "prompt":"患者喝酒有多少年了呢？",
+    "conditions": [{ "slot": "患者是否有喝酒的习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者喝酒时间","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者喝酒的时间。"
+  },
+    {
+    "slot": "患者喝酒的种类",
+    "symptom": "酒的种类",
+    "question_type": "text",
+    "priority": 9,
+    "prompt":"请问喝什么酒？",
+    "conditions": [{ "slot": "患者是否有喝酒的习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者喝酒的种类","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者平时喝酒喝什么酒。具体到白酒、红酒、啤酒、全都喝等。"
+  },
+    {
+    "slot": "患者每天饮酒量",
+    "symptom": "患者每天饮酒量",
+    "question_type": "text",
+    "priority": 10,
+    "prompt":"患者平均每天大概要喝多少呢？",
+    "conditions": [{ "slot": "患者是否有喝酒的习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者每天饮酒量","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者平时每天饮酒量。平均按照“两”计算。一两是50毫升。"
+  },
+{
+    "slot": "患者是否戒酒",
+    "symptom": "患者是否戒酒",
+    "question_type": "yes_no_unknown",
+    "priority": 11,
+    "prompt":"请问患者现在戒酒了吗？",
+    "conditions": [{ "slot": "患者是否有喝酒的习惯", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者是否戒酒","value":"True/ False/ Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者患者是否戒酒。"
+  },
+    {
+    "slot": "患者戒酒时间",
+    "symptom": "患者戒酒时间",
+    "question_type": "text",
+    "priority": 12,
+    "prompt":"患者到现在戒酒多久了呢？",
+    "conditions": [{ "slot": "患者是否有喝酒的习惯", "operator": "=", "value": "True" },
+                    { "slot": "患者是否戒酒", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者戒酒时间","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者的戒酒时间。"
+  }
+]

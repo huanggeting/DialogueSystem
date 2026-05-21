@@ -1,0 +1,486 @@
+[    
+    {
+    "slot": "患者的慢性病",
+    "symptom": "患者的慢性病",
+    "question_type": "text",
+    "priority": 1,
+    "prompt":"平时身体情况怎么样？有没有高血压、糖尿病、冠心病等基础疾病？或者正在吃这些疾病的药物？",
+    "conditions": [],
+    "structure_format":{"slot":"患者的慢性病","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者所患的慢性病。在未使用降压药物的情况下，非同日3次测量诊室血压，SBP≥140mmHg或DBP≥90mmHg。SBP≥140mmHg 和 DBP＜90mmHg 为单纯收缩期高血压。病人既往有高血压史，目前正在使用降压药物，血压虽然低于 140/90mmHg，仍应诊断为高血压"
+  },
+    {
+    "slot": "患者患高血压时间",
+    "symptom": "患者患高血压时间",
+    "question_type": "duration",
+    "priority": 2,
+    "prompt":"患者患高血压多少年了呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+    "structure_format":{"slot":"患者患高血压时间","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者所患高血压的时间。比如多少年，多少月。"
+  },
+    {
+    "slot": "患者最高高血压",
+    "symptom": "患者最高高血压",
+    "question_type": "text",
+    "priority": 3,
+    "prompt":"患者曾经最高血压是多少呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+    "structure_format":{"slot":"患者最高高血压","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者的最高高血压。最后提取的结果是两个血压数值，一个收缩压，一个舒张压。如果患者回答不清楚，则提取为不详。"
+  },
+    {
+    "slot": "患者是否有高血压并发症",
+    "symptom": "患者是否有高血压并发症",
+    "question_type": "text",
+    "priority": 4,
+    "prompt":"患者有因为高血压出现过脑梗、脑出血、心梗等并发症吗？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+    "structure_format":{"slot":"患者是否有高血压并发症","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者是否有高血压并发症。如果患者说没有，则填无。脑血管病：脑出血、脑血栓形成、腔隙性脑梗死、短暂性脑缺血发作。心脏疾病：心力衰竭、冠心病（心肌梗死、心绞痛）。高血压是冠心病最重要的危险因素之一，可导致左心室肥厚。肾脏疾病：长期高血压可导致肾小动脉硬化、肾功能减退，最终发展为慢性肾衰竭。其他：主动脉夹层。"
+  },
+    {
+    "slot": "患者是否服用高血压药物",
+    "symptom": "患者是否服用高血压药物",
+    "question_type": "yes_no_unknown",
+    "priority": 5,
+    "prompt":"患者现在在服用药物控制吗？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+    "structure_format":{"slot":"患者是否服用高血压药物","value":"True/False/Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者是否服用高血压药物。"
+  },
+    {
+        "slot": "患者高血压药物服用情况",
+        "symptom": "患者高血压药物服用情况",
+        "question_type": "text",
+        "priority": 6,
+        "prompt":"患者服用的具体是什么药物呢？一天服用多少次，每次多少剂量呢？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" },
+                      { "slot": "患者是否服用高血压药物", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者高血压药物服用情况","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者服用的高血压药物、使用频率以及一次的剂量。格式可以是药物名称：一天次数：每次服用剂量：。具体的药物有利尿剂：如氢氯噻嗪、吲达帕胺。β受体拮抗剂：如美托洛尔、比索洛尔。钙通道阻滞剂 (CCB)：如硝苯地平、氨氯地平、非洛地平。血管紧张素转换酶抑制剂 (ACEI)：如卡托普利、依那普利、贝那普利。血管紧张素Ⅱ受体拮抗剂 (ARB)：如氯沙坦、缬沙坦、厄贝沙坦。血管紧张素受体脑啡肽酶抑制剂 (ARNI)：如沙库巴曲缬沙坦。固定复方制剂：由两种或以上降压药组成，如ACEI/ARB+CCB或ACEI/ARB+利尿剂。"
+      },
+    {
+        "slot": "患者是否规律检测高血压",
+        "symptom": "患者是否规律检测高血压",
+        "question_type": "yes_no_unknown",
+        "priority": 7,
+        "prompt":"患者平时有在规律检测血压吗？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+        "structure_format":{"slot":"患者是否规律检测高血压","value":"True/ False/ Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否规律检测高血压。"
+      },
+    {
+        "slot": "患者血压控制范围",
+        "symptom": "患者血压控制范围",
+        "question_type": "text",
+        "priority": 8,
+        "prompt":"患者平时血压控制在什么范围呢？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "高血压" }],
+        "structure_format":{"slot":"患者血压控制范围","value":"收缩压：/舒张压： /Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者平时的血压控制范围是多少。一般是包括收缩压和舒张压。一般目标：< 140/90 mmHg。特殊人群目标：合并糖尿病、慢性肾脏病、心力衰竭或病情稳定的冠心病患者，目标为 < 130/80 mmHg。老年人：收缩压控制在150mmHg以下，如能耐受可降至140mmHg以下。"
+      },
+
+
+
+    {
+    "slot": "患者糖尿病时间",
+    "symptom": "患者糖尿病时间",
+    "question_type": "text",
+    "priority": 9,
+    "prompt":"患者患糖尿病多少年了呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" }],
+    "structure_format":{"slot":"患者糖尿病时间","value":"时间 /Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者患糖尿病的时间。"
+  },
+    {
+    "slot": "患者糖尿病类型",
+    "symptom": "患者糖尿病类型",
+    "question_type": "text",
+    "priority": 10,
+    "prompt":"患者是一型糖尿病还是二型糖尿病？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" }],
+    "structure_format":{"slot":"患者糖尿病类型","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者患糖尿病的类型。"
+  },
+    {
+    "slot": "患者是否服用糖尿病药物",
+    "symptom": "患者是否服用糖尿病药物",
+    "question_type": "yes_no_unknown",
+    "priority": 11,
+    "prompt":"患者现在在服用药物控制吗？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" }],
+    "structure_format":{"slot":"患者是否服用糖尿病药物","value":"True/ False /Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者是否服用糖尿病药物。"
+  },
+    {
+    "slot": "患者糖尿病药物服用情况",
+    "symptom": "患者糖尿病药物服用情况",
+    "question_type": "text",
+    "priority": 12,
+    "prompt":"患者服用的具体是什么药物呢？一天服用多少次，每次多少剂量呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" },
+                  { "slot": "患者是否服用糖尿病药物", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"糖尿病药物服用情况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者服用糖尿病药物的情况。一般格式为药物名称：一天次数：每次服用剂量：一般糖尿病的药物有：口服降糖药：双胍类：二甲双胍（Metformin），是T2DM的基础用药。促胰岛素分泌剂：磺酰脲类（如格列齐特、格列美脲）、格列奈类（如瑞格列奈）。α-葡萄糖苷酶抑制剂：阿卡波糖、伏格列波糖。噻唑烷二酮类 (TZD)：吡格列酮。DPP-4抑制剂：西格列汀、沙格列汀。SGLT-2抑制剂 (SGLT-2i)：达格列净、恩格列净、卡格列净。GLP-1受体激动剂 (GLP-1RA)：利拉鲁肽、司美格鲁肽、度拉糖肽（注射剂）。胰岛素：类型：根据作用时间分为短效、中效、长效和预混胰岛素及其类似物（速效、长效等）。常见制剂：门冬胰岛素、赖脯胰岛素（速效类似物）；甘精胰岛素、地特胰岛素、德谷胰岛素（长效类似物）；各种预混制剂（如门冬胰岛素30/50）。"
+  },
+    {
+        "slot": "患者是否进行胰岛素注射",
+        "symptom": "患者是否进行胰岛素注射",
+        "question_type": "yes_no_unknown",
+        "priority": 13,
+        "prompt":"患者是餐前或睡前在注射胰岛素吗？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" }],
+        "structure_format":{"slot":"患者是否进行胰岛素注射","value":"True/ False /Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否进行胰岛素注射。"
+      },
+    {
+        "slot": "患者胰岛素药物详情",
+        "symptom": "患者胰岛素药物详情",
+        "question_type": "text",
+        "priority": 14,
+        "prompt":"具体是什么药物呢？每次多少个单位？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" },
+                      { "slot": "患者是否进行胰岛素注射", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者胰岛素药物详情","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者使用胰岛素药物的情况。一般格式为药物名称：一天次数：每次注射剂量：胰岛素：类型：根据作用时间分为短效、中效、长效和预混胰岛素及其类似物（速效、长效等）。常见制剂：门冬胰岛素、赖脯胰岛素（速效类似物）；甘精胰岛素、地特胰岛素、德谷胰岛素（长效类似物）；各种预混制剂（如门冬胰岛素30/50）。"
+      },
+    {
+        "slot": "患者血糖控制范围",
+        "symptom": "患者血糖控制范围",
+        "question_type": "text",
+        "priority": 15,
+        "prompt":"患者平时血糖控制在什么范围？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "糖尿病" }],
+        "structure_format":{"slot":"患者血糖控制范围","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者血糖的控制范围。一般目标：糖化血红蛋白 (HbA1c) < 7.0%。个体化目标：严格控制 (HbA1c ≤ 6.5%)：适用于病程短、预期寿命长、无明显心血管疾病的患者。宽松控制 (HbA1c ≥ 8.0%)：适用于有严重低血糖史、预期寿命有限、已有显著并发症的患者。具体血糖值：空腹血糖：4.4～7.0 mmol/L餐后2小时血糖：< 10.0 mmol/L"
+      },
+
+
+
+
+{
+    "slot": "患者冠心病时间",
+    "symptom": "患者冠心病时间",
+    "question_type": "text",
+    "priority": 16,
+    "prompt":"患者患冠心病多少年了呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" }],
+    "structure_format":{"slot":"患者冠心病时间","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者患冠心病的时间。"
+  },
+    {
+    "slot": "患者是否存在胸痛症状",
+    "symptom": "患者是否存在胸痛症状",
+    "question_type": "yes_no_unknown",
+    "priority": 17,
+    "prompt":"患者现在平时有胸痛，或活动后有胸痛症状吗？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" }],
+    "structure_format":{"slot":"患者是否存在胸痛症状","value":"True/False/Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者是否存在胸痛症状。"
+  },
+    {
+    "slot": "患者冠状动脉情况",
+    "symptom": "患者冠状动脉情况",
+    "question_type": "text",
+    "priority": 18,
+    "prompt":"患者是哪一支或哪些冠状动脉狭窄了呢？狭窄程度是多少呢？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" }],
+    "structure_format":{"slot":"患者冠状动脉情况","value":"狭窄的冠状动脉：/狭窄程度： %/Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者的冠状动脉的情况。一般的提取格式为：狭窄的冠状动脉：狭窄程度： %。主要冠状动脉：左冠状动脉（分为左主干、左前降支、左回旋支）和右冠状动脉。狭窄程度：一般认为管腔直径减少70%~75%以上会严重影响血供。"
+  },
+    {
+    "slot": "患者是否心脏支架置入",
+    "symptom": "患者是否心脏支架置入",
+    "question_type": "yes_no_unknown",
+    "priority": 19,
+    "prompt":"患者有做过心脏支架置入手术吗？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" }],
+    "structure_format":{"slot":"患者是否心脏支架置入","value":"True/ False/ Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者的冠状动脉的情况。经皮冠状动脉介入术 (PCI)。方式：包括球囊扩张、冠脉支架植入术（常用药物洗脱支架）、斑块旋磨术等。目的：对狭窄或阻塞的冠状动脉进行血运重建。"
+  },
+    {
+    "slot": "患者心脏支架置入手术时间",
+    "symptom": "患者心脏支架置入手术时间",
+    "question_type": "datetime",
+    "priority": 20,
+    "prompt":"患者请问是哪一年进行的心脏支架置入手术？",
+    "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" },
+                  { "slot": "患者是否心脏支架置入", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者心脏支架置入手术时间","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+    {
+        "slot": "患者是否服用冠心病药物",
+        "symptom": "患者是否服用冠心病药物",
+        "question_type": "yes_no_unknown",
+        "priority": 21,
+        "prompt":"患者现在在服用药物控制吗？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" }],
+        "structure_format":{"slot":"患者是否服用冠心病药物","value":"True/ False/ Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否服用冠心病药物。常见的冠心病药物是抗血小板药：阿司匹林、氯吡格雷、替格瑞洛。调脂药：他汀类药物（如阿托伐他汀、瑞舒伐他汀）。β受体拮抗剂：美托洛尔、比索洛尔。硝酸酯类药物：硝酸甘油、硝酸异山梨酯。ACEI/ARB/ARNI：如培哚普利、缬沙坦等。"
+      },
+    {
+        "slot": "患者冠心病药物详情",
+        "symptom": "患者冠心病药物详情",
+        "question_type": "text",
+        "priority": 22,
+        "prompt":"具体是什么药物呢？一天服用多少次，每次多少剂量呢？",
+        "conditions": [{ "slot": "患者的慢性病", "operator": "contains", "value": "冠心病" },
+                      { "slot": "患者是否服用冠心病药物", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者冠心病药物详情","value":"药物名称：/一天次数：/每次服用剂量： /Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者服用冠心病药物的情况。一般提取的格式为：药物名称：一天次数：每次服用剂量： 。常见的冠心病药物是抗血小板药：阿司匹林、氯吡格雷、替格瑞洛。调脂药：他汀类药物（如阿托伐他汀、瑞舒伐他汀）。β受体拮抗剂：美托洛尔、比索洛尔。硝酸酯类药物：硝酸甘油、硝酸异山梨酯。ACEI/ARB/ARNI：如培哚普利、缬沙坦等。"
+      },
+
+    
+
+    {
+        "slot": "患者是否患有传染病",
+        "symptom": "患者是否患有传染病",
+        "question_type": "yes_no_unknown",
+        "priority": 23,
+        "prompt":"请问患者有患过肝炎、结核等传染病吗？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否患有传染病","value":"True/ False/ Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者患有传染病情况。True/False，True需要提及有肝炎、乙肝、丙肝、甲肝或结核等字样。"
+      },
+    {
+        "slot": "患者患传染病时间",
+        "symptom": "患者患传染病时间",
+        "question_type": "text",
+        "priority": 24,
+        "prompt":"患者患这个传染病多少年了呢？",
+        "conditions": [{ "slot": "患者是否患有传染病", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者患传染病时间","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者患有传染病的时间。多少年或者多少个月。"
+      },
+    {
+        "slot": "患者是否接受过传染病治疗",
+        "symptom": "患者是否接受过传染病治疗",
+        "question_type": "yes_no_unknown",
+        "priority": 25,
+        "prompt":"患者有接受过什么关于传染病的治疗吗？",
+        "conditions": [{ "slot": "患者是否患有传染病", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者是否接受过传染病治疗","value":"True/ False/ Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否接受过传染病治疗。"
+      },
+    {
+        "slot": "患者传染病治疗效果",
+        "symptom": "患者传染病治疗效果",
+        "question_type": "text",
+        "priority": 26,
+        "prompt":"传染病治疗效果如何呢？",
+        "conditions": [{ "slot": "患者是否患有传染病", "operator": "=", "value": "True" },
+                      { "slot": "患者是否接受过传染病治疗", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者传染病治疗效果","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者传染病治疗效果。好转/ 不变/ /不佳/ 不详"
+      },
+    {
+        "slot": "患者传染病治疗效果不佳原因",
+        "symptom": "患者传染病治疗效果不佳原因",
+        "question_type": "text",
+        "priority": 27,
+        "prompt":"患者为何感觉不佳？",
+        "conditions": [{ "slot": "患者是否患有传染病", "operator": "=", "value": "True" },
+                      { "slot": "患者是否接受过传染病治疗", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者传染病治疗效果不佳原因","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者治疗效果不佳原因。"
+      },
+    
+    
+    {
+        "slot": "患者是否做过手术",
+        "symptom": "患者是否做过手术",
+        "question_type": "yes_no_unknown",
+        "priority": 28,
+        "prompt":"患者请问之前有做过什么手术吗？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否做过手术","value":"True/ False/ Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否做过手术。"
+      },
+    {
+        "slot": "患者的手术类型",
+        "symptom": "患者的手术类型",
+        "question_type": "text",
+        "priority": 29,
+        "prompt":"请问是什么手术？",
+        "conditions": [{ "slot": "患者是否做过手术", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者的手术类型","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者做过什么手术。"
+      },
+    {
+        "slot": "患者的手术时间",
+        "symptom": "患者的手术时间",
+        "question_type": "datetime",
+        "priority": 30,
+        "prompt":"请问手术是什么时候做的？",
+        "conditions": [{ "slot": "患者是否做过手术", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者的手术时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"},
+        "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+      },
+    {
+        "slot": "患者做过手术的效果",
+        "symptom": "患者做过手术的效果",
+        "question_type": "text",
+        "priority": 31,
+        "prompt":"请问手术效果如何？",
+        "conditions": [{ "slot": "患者是否做过手术", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者做过手术的效果","value":"好转 /不佳 / Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者做手术后的效果。具体课概括为好转 /不佳 / 不详。"
+      },
+    {
+        "slot": "患者做手术不佳的原因",
+        "symptom": "患者做手术不佳的原因",
+        "question_type": "yes_no",
+        "priority": 32,
+        "prompt":"为何感觉不佳？",
+        "conditions": [{ "slot": "患者做过手术的效果", "operator": "contains", "value": "不佳" }, { "slot": "患者是否做过手术", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者做手术不佳的原因","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者做完手术不佳的原因。"
+      },
+    
+    
+    {
+        "slot": "患者是否有过外伤",
+        "symptom": "患者是否有过外伤",
+        "question_type": "yes_no_unknown",
+        "priority": 33,
+        "prompt":"患者有没有受过外伤？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否有过外伤","value":"True/ False / Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否有过外伤。"
+      },
+    {
+        "slot": "患者外伤受伤位置",
+        "symptom": "患者外伤受伤位置",
+        "question_type": "text",
+        "priority": 34,
+        "prompt":"请问是什么位置受伤？",
+        "conditions": [{ "slot": "患者是否有过外伤", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者外伤受伤位置","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者外伤受伤位置。"
+      },
+    {
+        "slot": "患者受伤时间",
+        "symptom": "患者受伤时间",
+        "question_type": "datetime",
+        "priority": 35,
+        "prompt":"请问患者是什么时候受伤？",
+        "conditions": [{ "slot": "患者是否有过外伤", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者受伤时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"},
+        "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+      },
+    {
+        "slot": "患者外伤恢复情况",
+        "symptom": "患者外伤恢复情况",
+        "question_type": "text",
+        "priority": 36,
+        "prompt":"请问患者外伤恢复得如何？",
+        "conditions": [{ "slot": "患者是否有过外伤", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者外伤恢复情况","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者外伤恢复情况。具体概括为好转/ 不佳/ 不详。"
+      },
+    {
+        "slot": "患者外伤恢复不佳的原因",
+        "symptom": "患者外伤恢复不佳的原因",
+        "question_type": "text",
+        "priority": 37,
+        "prompt":"患者为何感觉外伤恢复不佳？",
+        "conditions": [{ "slot": "患者是否有过外伤", "operator": "=", "value": "True" },
+                       { "slot": "患者外伤恢复情况", "operator": "contains","value":"不佳"}],
+        "structure_format":{"slot":"患者外伤恢复不佳的原因","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者外伤恢复不佳的原因。"
+      },
+    {
+        "slot": "患者是否有输血经历",
+        "symptom": "患者是否有输血经历",
+        "question_type": "yes_no_unknown",
+        "priority": 38,
+        "prompt":"患者有没有输过血？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否有输血经历","value":"True/False/Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否有输血经历。"
+      },
+    {
+        "slot": "患者输血的原因",
+        "symptom": "患者输血的原因",
+        "question_type": "text",
+        "priority": 39,
+        "prompt":"请问患者输血的原因是什么？",
+        "conditions": [{ "slot": "患者是否有输血经历", "operator": "=", "value": "True"}],
+        "structure_format":{"slot":"患者输血的原因","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者输血的原因。"
+      },
+    {
+        "slot": "患者输血量",
+        "symptom": "患者输血量",
+        "question_type": "text",
+        "priority": 40,
+        "prompt":"请问患者输了多少血？",
+        "conditions": [{ "slot": "患者是否有输血经历", "operator": "=", "value": "True"}],
+        "structure_format":{"slot":"患者输血量","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者输血量。单位为ml."
+      },
+    {
+        "slot": "患者有无输血反应",
+        "symptom": "患者有无输血反应",
+        "question_type": "yes_no_unknown",
+        "priority": 41,
+        "prompt":"患者有无输血反应？",
+        "conditions": [{ "slot": "患者是否有输血经历", "operator": "=", "value": "True"}],
+        "structure_format":{"slot":"患者有无输血反应","value":"True/False/Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者有无输血反应."
+      },
+    {
+        "slot": "患者的输血反应",
+        "symptom": "患者的输血反应",
+        "question_type": "text",
+        "priority": 42,
+        "prompt":"患者输血反应表现为什么？",
+        "conditions": [{ "slot": "患者有无输血反应", "operator": "=", "value": "True"}],
+        "structure_format":{"slot":"患者的输血反应","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者输血反应.输血存在不良反应风险，可分为溶血性和非溶血性。溶血性反应：由血型不合引起，表现为高热、寒战、腰背痛、血红蛋白尿，严重可致急性肾衰竭和DIC。非溶血性反应：发热：最常见，由致热原或免疫反应引起。过敏反应：轻者为荨麻疹，重者可有喉头水肿、支气管痉挛、过敏性休克。输血相关急性肺损伤 (TRALI)：由供者血浆中的抗体引起，是严重的肺部并发症。循环超负荷 (TACO)：输血过快或过多导致心力衰竭。传播疾病：尽管经过筛查，仍有极低概率传播病毒性肝炎、艾滋病、梅毒等。"
+      },
+
+
+    {
+        "slot": "患者是否按照国家规范接种疫苗",
+        "symptom": "患者是否按照国家规范接种疫苗",
+        "question_type": "yes_no_unknown",
+        "priority": 43,
+        "prompt":"患者小时候是否按照国家规划接种疫苗？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否按照国家规范接种疫苗","value":"True/False/Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否按照国家规范接种疫苗。在现行范围内已经使用的乙肝疫苗、卡介苗、脊灰疫苗、百白破疫苗、白破疫苗、麻疹疫苗、A群流脑疫苗、乙脑疫苗等8种疫苗的基础上，以无细胞百白破疫苗替代百白破疫苗，并将麻腮风疫苗、A+C群流脑疫苗、甲肝疫苗等3种疫苗纳入儿童免疫规划，对适龄儿童进行常规接种。通过接种上述11种疫苗，预防乙型肝炎、结核病、脊髓灰质炎、百日咳、白喉、破伤风、麻疹、流行性腮腺炎、风疹、流行性乙型脑炎、流行性脑脊髓膜炎、甲型肝炎等12种传染病。"
+      },
+    {
+        "slot": "患者没有接种的疫苗类型",
+        "symptom": "患者没有接种的疫苗类型",
+        "question_type": "text",
+        "priority": 44,
+        "prompt":"请问患者没有接种什么疫苗？",
+        "conditions": [{ "slot": "患者是否按照国家规范接种疫苗", "operator": "=", "value": "False"}],
+        "structure_format":{"slot":"患者没有接种的疫苗类型","value":""},
+        "expectations": "根据患者/患者家属的回答，提取出患者没有接种的疫苗类型。在现行范围内已经使用的乙肝疫苗、卡介苗、脊灰疫苗、百白破疫苗、白破疫苗、麻疹疫苗、A群流脑疫苗、乙脑疫苗等8种疫苗的基础上，以无细胞百白破疫苗替代百白破疫苗，并将麻腮风疫苗、A+C群流脑疫苗、甲肝疫苗等3种疫苗纳入儿童免疫规划，对适龄儿童进行常规接种。通过接种上述11种疫苗，预防乙型肝炎、结核病、脊髓灰质炎、百日咳、白喉、破伤风、麻疹、流行性腮腺炎、风疹、流行性乙型脑炎、流行性脑脊髓膜炎、甲型肝炎等12种传染病。"
+    },
+    {
+        "slot": "患者是否存在过敏",
+        "symptom": "患者是否存在过敏",
+        "question_type": "yes_no_unknown",
+        "priority": 45,
+        "prompt":"患者有没有对什么东西过敏？比如食物，药物，或者接触粉尘之类的？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否存在过敏","value":"True/False/Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者是否能存在过敏。过敏性鼻炎：由过敏因素如螨虫、灰尘、动物毛皮、低温等刺激引起，表现为突发性连续喷嚏、鼻痒、鼻塞和大量清涕。 支气管哮喘：常有过敏史，接触变应原（如花粉、尘螨、动物毛皮）、药物（如阿司匹林）可诱发。 过敏性肺炎：易感个体反复吸入有机或无机粉尘抗原（如发霉干草中的嗜热放线菌、动物蛋白羽毛）后诱发的肺部迟发性变态反应。 过敏性紫癜 (IgA血管炎)：一种与感染、药物、食物等相关的免疫复合物血管炎，表现为皮肤可触性紫癜、腹痛、关节炎、肾炎。 药物过敏：多种药物可引起过敏反应，轻则皮疹，重则过敏性休克。药物是急性间质性肾炎(AIN)的常见原因，可表现为发热、皮疹、嗜酸性粒细胞增多。药物性肝损伤(DILI)也可能是免疫介导的。 输血过敏反应：可由IgA同种免疫、异型变应原等引起，表现为荨麻疹，重者可有过敏性休克。"
+      },
+    {
+        "slot": "患者过敏详细情况",
+        "symptom": "患者过敏详细情况",
+        "question_type": "yes_no_unknown",
+        "priority": 46,
+        "prompt":"请问患者过敏反应具体表现为什么？",
+        "conditions": [{ "slot": "患者是否存在过敏", "operator": "=", "value": "False"}],
+        "structure_format":{"slot":"患者过敏详细情况","value":"过敏原：，过敏反应：。/Unknown"},
+        "expectations": "根据患者/患者家属的回答，提取出患者过敏详细情况。需提及具体的过敏原以及对应的过敏反应，一般格式为过敏原：,过敏反应: 。"
+      }
+]
