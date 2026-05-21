@@ -34,3 +34,9 @@ runs/
 *.tar
 *.tar.gz
 *.rar
+
+Qwen/
+result_files/
+question_tmp/
+__pycache__/
+*.pyc
