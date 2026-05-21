@@ -1,0 +1,152 @@
+[
+  {
+    "slot": "病患父亲身体状况",
+    "symptom": "病患父亲身体状况",
+    "question_type": "text",
+    "priority": 1,
+    "prompt":"患者父亲身体情况怎么样？",
+    "conditions": [],
+    "structure_format":{"slot":"病患父亲身体状况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者父亲的身体情况。提取结果可总结为三类：去世/ 患病/ 健康。如果有患病，请总结出患病的种类是什么。"
+  },
+    {
+    "slot": "病患父亲去世时间",
+    "symptom": "病患父亲去世时间",
+    "question_type": "datetime",
+    "priority": 2,
+    "prompt":"患者父亲去世多久了？",
+    "conditions": [{ "slot": "病患父亲身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患父亲去世时间","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+    {
+    "slot": "病患父亲去世原因",
+    "symptom": "病患父亲去世原因",
+    "question_type": "text",
+    "priority": 3,
+    "prompt":"患者父亲是因为什么原因去世的？",
+    "conditions": [{ "slot": "病患父亲身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患父亲去世原因","value":"疾病 / 意外 / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者父亲的去世原因。去世的原因一般分为2类：疾病/意外。如果是疾病，可提取是什么疾病，如果是意外，请提取是什么意外。如果患者没有详细表明，则填不详。"
+  },
+    {
+    "slot": "病患父亲身体患病情况",
+    "symptom": "病患父亲身体患病情况",
+    "question_type": "text",
+    "priority": 4,
+    "prompt":"患者的父亲身体状况怎么样？他的身体有什么疾病吗？",
+    "conditions": [{ "slot": "病患父亲身体状况", "operator": "not_contains", "value": "去世"}],
+    "structure_format":{"slot":"病患父亲身体患病情况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出病患父亲身体患病情况。如果健康，则提取为健康。如果患有疾病，提取出是什么疾病。如果患者没有详细表明，则填入不详。"
+  },
+    {
+    "slot": "病患母亲身体状况",
+    "symptom": "病患母亲身体状况",
+    "question_type": "text",
+    "priority": 5,
+    "prompt":"您的母亲身体情况怎么样？",
+    "conditions": [],
+    "structure_format":{"slot":"病患母亲身体状况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出患者母亲的身体情况。提取结果可总结为三类：去世/ 患病/ 健康。如果有患病，请总结出患病的种类是什么。"
+  },
+    {
+    "slot": "病患母亲去世时间",
+    "symptom": "病患母亲去世时间",
+    "question_type": "datetime",
+    "priority": 6,
+    "prompt":"患者母亲去世多久了？",
+    "conditions": [{ "slot": "病患母亲身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患母亲去世时间","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+    {
+    "slot": "病患母亲去世原因",
+    "symptom": "病患母亲去世原因",
+    "question_type": "text",
+    "priority": 7,
+    "prompt":"是因为什么原因去世的？",
+    "conditions": [{ "slot": "病患母亲身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患母亲去世原因","value":"疾病 / 意外 / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者母亲的去世原因。去世的原因一般分为2类：疾病/意外。如果是疾病，可提取是什么疾病，如果是意外，请提取是什么意外。如果患者没有详细表明，则填不详。"
+  },
+    {
+    "slot": "病患母亲身体患病情况",
+    "symptom": "病患母亲身体患病情况",
+    "question_type": "text",
+    "priority": 8,
+    "prompt":"你的母亲身体状况怎么样？她的身体有什么疾病吗？",
+    "conditions": [{ "slot": "病患母亲身体状况", "operator": "not_contains", "value": "去世"}],
+    "structure_format":{"slot":"病患母亲身体患病情况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出病患母亲身体患病情况。如果健康，则提取为健康。如果患有疾病，提取出是什么疾病。如果患者没有详细表明，则填入不详。"
+  },
+    {
+    "slot": "病患是否有兄弟姐妹",
+    "symptom": "病患是否有兄弟姐妹",
+    "question_type": "yes_no_unknown",
+    "priority": 9,
+    "prompt":"家里有亲兄弟或者亲姐妹吗？",
+    "conditions": [],
+    "structure_format":{"slot":"病患是否有兄弟姐妹","value":"True / False / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出病患是否有兄弟姐妹。"
+  },
+    {
+    "slot": "病患兄弟姐妹身体状况",
+    "symptom": "病患兄弟姐妹身体状况",
+    "question_type": "text",
+    "priority": 10,
+    "prompt":"患者的兄弟姐妹身体情况怎么样？",
+    "conditions": [],
+    "structure_format":{"slot":"病患兄弟姐妹身体状况","value":"去世/ 患病/ 健康"},
+    "expectations": "根据患者/患者家属的回答，提取出病患兄弟姐妹身体情况。如果健康，则提取为健康。如果患有疾病，提取出是什么疾病。如果患者没有详细表明，则填入不详。如果有多个兄弟姐妹，可分开对象进行提取，比如，兄弟1：健康/所患疾病/去世，姐妹1：健康/所患疾病/去世..."
+  },
+    {
+    "slot": "病患兄弟姐妹去世时间",
+    "symptom": "病患兄弟姐妹去世时间",
+    "question_type": "datetime",
+    "priority": 11,
+    "prompt":"患者去世多久了？",
+    "conditions": [{ "slot": "病患兄弟姐妹身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患兄弟姐妹去世时间","value":"YYYY-MM / YYYY-MM-DD / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者兄弟姐妹的去世时间。具体时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述。如果有多个兄弟姐妹，可分开对象进行提取，比如，兄弟1：去世时间，姐妹1：去世时间..."
+  },
+    {
+    "slot": "病患兄弟姐妹去世原因",
+    "symptom": "病患兄弟姐妹去世原因",
+    "question_type": "text",
+    "priority": 12,
+    "prompt":"是因为什么原因去世的？",
+    "conditions": [{ "slot": "病患兄弟姐妹身体状况", "operator": "contains", "value": "去世"}],
+    "structure_format":{"slot":"病患兄弟姐妹去世原因","value":"疾病 / 意外 / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者兄弟姐妹的去世原因。去世的原因一般分为2类：疾病/意外。如果是疾病，可提取是什么疾病，如果是意外，请提取是什么意外。如果患者没有详细表明，则填不详。如果有多个兄弟姐妹，可分开对象进行提取，比如，兄弟1：疾病/意外/不详，姐妹1：疾病/意外/不详..."
+  },
+    {
+    "slot": "病患兄弟姐妹身体患病情况",
+    "symptom": "病患兄弟姐妹身体患病情况",
+    "question_type": "text",
+    "priority": 13,
+    "prompt":"身体状况怎么样？身体有什么疾病吗？",
+    "conditions": [{ "slot": "病患兄弟姐妹身体状况", "operator": "not_contains", "value": "去世"}],
+    "structure_format":{"slot":"病患兄弟姐妹身体患病情况","value":""},
+    "expectations": "根据患者/患者家属的回答，提取出病患兄弟姐妹身体患病情况。如果健康，则提取为健康。如果患有疾病，提取出是什么疾病。如果患者没有详细表明，则填入不详。如果有多个兄弟姐妹，可分开对象进行提取，比如，兄弟1：健康/疾病/不详，姐妹1：健康/疾病/不详..."
+  },
+    {
+    "slot": "患者家族是否有遗传病史",
+    "symptom": "患者家族是否有遗传病史",
+    "question_type": "yes_no_unknown",
+    "priority": 14,
+    "prompt":"家里有什么遗传病史吗？在你们家族较为常见，或者有遗传倾向？",
+    "conditions": [],
+    "structure_format":{"slot":"患者家族是否有遗传病史","value":"True / False / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出病患是否有遗传病史。"
+  },
+    {
+    "slot": "患者家族遗传病类型",
+    "symptom": "患者家族遗传病类型",
+    "question_type": "text",
+    "priority": 15,
+    "prompt":"具体是什么遗传病呢？",
+    "conditions": [{ "slot": "患者家族是否有遗传病史", "operator": "=", "value": "True"}],
+    "structure_format":{"slot":"患者家族遗传病类型","value":"疾病名称 / Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出病患家族遗传病的种类。遗传病分为单基因病（如囊性纤维化）、多基因病（如高血压、糖尿病）、染色体病（如唐氏综合征）。癌症的家族聚集性明显，如乳腺癌、结直肠癌有遗传易感性。若患者家族中存在遗传病，临床医生会考虑遗传咨询与基因检测。"
+  }
+]

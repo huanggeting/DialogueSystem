@@ -1,0 +1,38 @@
+[
+  {
+    "slot": "受访者是否为病患本人",
+    "symptom": "受访者是否为病患本人",
+    "question_type": "yes_no_unknown",
+    "priority": 1,
+    "prompt":"您好。为了更好地了解您的病情，我现在需要详细询问您的病史，请您配合一下。请问是[患者姓名]本人吗？",
+    "conditions": [],
+    "structure_format":{"slot":"受访者是否为病患本人","type":"bool", "value":"True/ False/ Unknown"},
+    "expectations":"查明受访者是否是患者本人"
+  },
+    {
+    "slot": "受访者与患者的关系",
+    "symptom": "受访者与患者的关系",
+    "question_type": "text",
+    "priority": 2,
+    "prompt":"请问您和患者[患者姓名]是什么关系呢?",
+    "conditions": [{"slot": "被问者是否为病患本人",
+                   "operator": "=",
+                   "value": "False"}],
+    "structure_format":{"slot":"受访者与患者的关系","type":"text","value":""},
+    "expectations":"亲属关系，如母女"
+  },
+    {
+    "slot": "本次来医院的原因",
+    "symptom": "本次来医院的原因",
+    "question_type": "object",
+    "priority": 3,
+    "prompt":"请问这次来医院是什么原因呢？",
+    "conditions": [],
+    "structure_format":{"slot":"本次来医院的原因","type":"object" ,"value":{
+    "本次来医院的原因与肺结节相关":"True/ False/ Unknown",
+    "本次来医院的原因与手术相关":"True/ False/ Unknown",
+    "本次来医院的原因与复查相关":"True/ False/ Unknown",
+    "本次来医院的原因与开药相关":"True/ False/ Unknown"}},
+    "expectations":"主要需要总结患者是否是因为肺结节来的医院"
+  }
+]

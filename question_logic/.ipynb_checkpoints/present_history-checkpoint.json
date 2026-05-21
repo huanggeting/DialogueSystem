@@ -1,0 +1,627 @@
+[
+  {
+    "slot": "受访者是否为病患本人",
+    "symptom": "受访者是否为病患本人",
+    "question_type": "yes_no_unknown",
+    "priority": 1,
+    "prompt":"您好。为了更好地了解您的病情，我现在需要详细询问您的病史，请您配合一下。请问是患者本人吗？",
+    "conditions": [],
+    "structure_format":{"slot":"受访者是否为病患本人","type":"bool", "value":""},
+    "expectations": "从回答中判断是否为本人。是本人→True，不是本人→False，无法判断→Unknown。"
+  },
+    {
+    "slot": "受访者与患者的关系",
+    "symptom": "受访者与患者的关系",
+    "question_type": "text",
+    "priority": 2,
+    "prompt":"请问您和患者是什么关系呢?",
+    "conditions": [{"slot": "受访者是否为病患本人",
+                   "operator": "=",
+                   "value": "False"}],
+    "structure_format":{"slot":"受访者与患者的关系","type":"text","value":""},
+    "expectations": "正确判断受访者的回答表明受访者本人与患者的关系"
+  },
+    {
+    "slot": "患者本次来医院的原因",
+    "symptom": "患者本次来医院的原因",
+    "question_type": "object",
+    "priority": 3,
+    "prompt":"请问患者这次来医院是什么原因呢？",
+    "conditions": [],
+    "structure_format":{"slot":"患者本次来医院的原因","type":"object" ,"value":{
+    "患者本次来医院的原因与肺结节相关":"True/ False",
+    "患者本次来医院的原因与手术相关":"True/ False",
+    "患者本次来医院的原因与复查相关":"True/ False",
+    "患者本次来医院的原因与开药相关":"True/ False",
+    "患者本次来医院的总原因":""}},
+    "expectations": "根据患者/患者家属的回答，全面提取患者来医院的原因，只有当回答完全无法判断时才填写Unknown。"
+  },
+    {
+    "slot": "患者结节发现最早时间（年月日）",
+    "symptom": "患者结节发现最早时间（年月日）",
+    "question_type": "datetime",
+    "priority": 4,
+    "prompt":"请问患者最早是什么时候发现肺结节呢？",
+    "conditions": [
+      { "slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }
+    ],
+    "structure_format":{"slot":"患者结节发现最早时间（年月日）","value":"YYYY-MM-DD"},
+    "expectations": "根据患者/患者家属的回答，提取患者结节发现最早时间。如果回答中包含完整的年月日信息，则视为有效时间。如果回答中缺少完整的年月日信息（如只有年份、月或日），则视为无效回答，需要追问患者提供更完整的时间信息。如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述." 
+  },
+    {
+    "slot": "患者结节发现方式（体检/症状/病因）",
+    "symptom": "患者结节发现方式（体检/症状/病因）",
+    "question_type": "text",
+    "prompt":"患者是怎么发现肺结节的呢？",
+    "priority": 5,
+    "conditions": [{ "slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者结节发现方式（体检/症状/病因）","value":"体检/症状/病因/Unknown"},
+    "expectations": "根据患者/患者家属的回答，提取出患者发现结节的方式，（体检，或者具体的症状或病因。如果是症状，询问完该相关症状后再继续）"
+  },
+    {
+    "slot": "患者是否进行肺部CT检查",
+    "symptom": "患者是否进行肺部CT检查",
+    "question_type": "yes_no_unknown",
+    "prompt":"患者进行过胸部CT检查吗？",
+    "priority": 6,
+    "conditions": [ {"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者是否进行肺部CT检查","value":"Ture/False/Unknown"},
+    "expectations": "根据患者/患者家属的回答，正确提取出患者是否进行过肺部CT检查"
+  },
+    {
+    "slot": "患者肺部CT检查检查时间",
+    "symptom": "患者肺部CT检查检查时间",
+    "question_type": "datetime",
+    "prompt":"请问患者胸部CT是多久检查的呢?上一次检查时间是多久？",
+    "priority": 7,
+    "conditions": [{ "slot": "患者是否进行肺部CT检查", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者肺部CT检查检查时间","value":"YYYY-MM-DD"},
+    "expectations": "根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+    {
+    "slot": "患者结节发现的医院",
+    "symptom": "患者结节发现的医院",
+    "question_type": "text",
+    "priority": 8,
+    "prompt":"请问患者是在哪个医院检查发现的呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者结节发现的医院","value":"text"},
+    "expectations": "根据患者/患者家属的回答，尽可能提取医院具体名称；或笼统描述为当地医院也可以作为结果"
+  },
+    {
+    "slot": "患者的结节位置",
+    "symptom": "患者的结节位置",
+    "question_type": "text",
+    "priority": 9,
+    "prompt":"患者的结节在哪里呢？是在左肺还是右肺？还是双肺都有？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者的结节位置","value":""},
+    "expectations": "根据患者/患者家属的回答，提取患者的肺结节位置：左肺；右肺；双肺"
+  },
+    {
+    "slot": "患者的肺结节数量",
+    "symptom": "患者的肺结节数量",
+    "question_type": "text",
+    "priority": 10,
+    "prompt":"患者有多少个肺结节呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者的肺结节数量","value":""},
+    "expectations": "根据患者/患者家属的回答，具体数目，或者多个，或者不知道(unkonwn)"
+  },
+    {
+    "slot": "患者最大的肺结节直径",
+    "symptom": "患者最大的肺结节直径",
+    "question_type": "text",
+    "priority": 11,
+    "prompt":"患者最大的肺结节直径多少毫米（mm）或者多少厘米（cm）呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者最大的肺结节直径","value":""},
+    "expectations": "根据患者/患者家属的回答，具体结节大小数字，数字范围0.1到50mm，形如12mm或者1.2厘米"
+  },
+{
+    "slot": "患者是否咨询过医生",
+    "symptom": "患者是否咨询过医生",
+    "question_type": "yes_no_unknown",
+    "priority": 12,
+    "prompt":"发现结节后，患者有咨询过医生吗?",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者是否咨询过医生","value":"True/False/Unknown"},
+    "expectations": "根据患者/患者家属的回答，正确提取出患者是否咨询过医生"
+  },
+    {
+    "slot": "患者咨询医生关于肺结节的内容",
+    "symptom": "患者咨询医生关于肺结节的内容",
+    "question_type": "text",
+    "priority": 13,
+    "prompt":"患者咨询的医生怎么说呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者咨询医生关于肺结节的内容","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者咨询医生所建议的医嘱"
+  },
+    {
+    "slot": "医生建议多久复查",
+    "symptom": "医生建议多久复查",
+    "question_type": "text",
+    "priority": 14,
+    "prompt":"咨询的医生建议患者多久复查一次呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"医生建议多久复查","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者咨询医生所建议的复查，如果医生没有建议复查，可以填写咨询医生未建议复查。"
+  },
+    {
+    "slot": "患者发现结节后如何复查",
+    "symptom": "患者发现结节后如何复查",
+    "question_type": "text",
+    "priority": 15,
+    "prompt":"咨询医生后来呢？之后患者如何复查的呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后如何复查","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者发现结节后如何复查，比如复查的时间间隔，进行了几次复查，时间分别是什么时间等有效信息。如果患者说没有复查，则填写患者没有进行复查。"
+  },
+    {
+    "slot": "患者发现结节后复查结果",
+    "symptom": "患者发现结节后复查结果",
+    "question_type": "text",
+    "priority": 16,
+    "prompt":"患者复查的结果如何呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后复查结果","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者的复查结果，比如结节变大或者变小等情况。如果用户没有提供此类信息，填写不详。"
+  },
+    {
+    "slot": "患者发现结节后是否用药",
+    "symptom": "患者发现结节后是否用药",
+    "question_type": "yes_no_unkonwn",
+    "priority": 17,
+    "prompt":"患者发现结节之后有没有吃过什么药？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后是否用药","value":"True/False/Unknown"},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者发现结节后是否用药。"
+  },
+    {
+    "slot": "患者发现结节后使用药物名称",
+    "symptom": "患者发现结节后使用药物名称",
+    "question_type": "text",
+    "priority": 18,
+    "prompt":"患者发现结节之后使用的药叫什么名字呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "患者发现结节后是否用药","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后使用药物名称","value":""},
+    "expectations": "根据患者/患者家属的回答内容，尽可能提取患者服用的药物。当医生怀疑肺结节是炎症时，可能会开具如左氧氟沙星、莫西沙星或阿奇霉素等抗生素药物进行诊断性治疗。这整个过程是一个严谨的医疗决策，核心在于“诊断”而非简单的“消炎”，最终目的是通过服药后的复查结果来帮助判断结节的性质。当出现上述药物的时候，需要提取上述药物名称。"
+  },
+    {
+    "slot": "患者发现结节后的用药时长",
+    "symptom": "患者发现结节后的用药时长",
+    "question_type": "text",
+    "priority": 19,
+    "prompt":"患者吃了多久的药呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "患者发现结节后是否用药","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后的用药时长","value":"text"},
+    "expectations": "根据患者/患者家属的回答，尽可能提取患者服用的药物以及对应的时长。左氧氟沙星、莫西沙星或阿奇霉素等抗生素药物进行诊断性治疗的周期一般为14天。"
+  },
+    {
+    "slot": "患者发现结节后的吃药频率",
+    "symptom": "患者发现结节后的吃药频率",
+    "question_type": "text",
+    "priority": 20,
+    "prompt":"患者吃药的频率是多少呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "患者发现结节后是否用药","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者发现结节后的吃药频率","value":""},
+    "expectations": "根据患者/患者家属的回答，尽可能提取出患者服用的药物以及对应的吃药频率。常见肺结节治疗药物的服用频率为：左氧氟沙星、莫西沙星或阿奇霉素等抗生素药物进行诊断性治疗的频率一般是一天一次，一次一片（0.4g）。"
+  },
+    {
+    "slot": "患者用药后的结节变化",
+    "symptom": "患者用药后的结节变化",
+    "question_type": "text",
+    "priority": 21,
+    "prompt":"吃药以后，患者复查结节有无变化呢？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" },
+                    { "slot": "患者发现结节后是否用药","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者用药后的结节变化","value":"text"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者用药后的结节变化，可以根据患者的回答简单总结。肺结节在随访中有如下变化者，多考虑为良性：（1）短期内病灶外部特征变化明显，无分叶或出现深度分叶，边缘变光整或变模糊；（2）密度均匀或变淡；（3）在密度没有增加的情况下病灶缩小或消失；（4）病灶迅速增大，倍增时间<15 d。肺结节在随访中有如下变化时，多考虑为恶性：（1）直径增大，倍增时间符合肿瘤生长规律（不同恶性结节倍增周期变异度较大，实性肺结节倍增周期约20~400 d；亚实性结节倍增时间400~800 d或更长的时间）；（2）病灶稳定或增大，并出现实性成分；（3）病灶缩小，但出现实性成分或其中实性成分增加；（4）血管生成符合恶性肺结节规律；（5）出现分叶、毛刺和（或）胸膜凹陷征。"
+  },
+    {
+    "slot": "患者治疗结节时的额外的处理",
+    "symptom": "患者治疗结节时的额外的处理",
+    "question_type": "yes_no_unknown",
+    "priority": 22,
+    "prompt":"患者发现结节后，有没有自行做过什么处理？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者治疗结节时的额外的处理","value":"True/False/Unknown"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者是否进行过额外的处理"
+  },
+    {
+    "slot": "患者发现结节后的额外处理方式",
+    "symptom": "患者发现结节后的额外处理方式",
+    "question_type": "text",
+    "priority": 23,
+    "prompt":"具体处理方式是什么，比如：中医治疗，服用药物",
+    "conditions": [{ "slot": "患者治疗结节时的额外的处理", "operator": "=", "value": "True" }],
+    "structure_format":{"slot":"患者发现结节后的额外处理方式","value":"中医治疗/服用药物/其他额外处理方式"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者进行过什么额外的处理，如中医治疗，服用药物"
+  },
+    {
+    "slot": "患者是否要做肺结节手术",
+    "symptom": "患者是否要做肺结节手术",
+    "question_type": "yes_no_unknown",
+    "priority": 24,
+    "prompt":"患者本次就诊是来做肺结节手术的吗？",
+    "conditions": [{"slot": "患者本次来医院的原因.患者本次来医院的原因与肺结节相关", "operator": "=", "value": "True" },
+                    { "slot": "患者是否咨询过医生","operator": "=","value": "True" }],
+    "structure_format":{"slot":"患者是否要做肺结节手术","value":"True/False/Unknown"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者是否要做肺结节手术。"
+  },
+    
+    
+    {
+    "slot": "患者发现结节时的症状",
+    "symptom": "患者发现结节时的症状",
+    "question_type": "text",
+    "priority": 25,
+    "prompt":"患者发现肺结节时有没有什么症状呢？比如咳嗽、咳痰、咯血、胸痛、呼吸困难等。",
+    "conditions": [],
+    "structure_format":{"slot":"患者发现结节时的症状","value":"text"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者在发现结节时候的病症表现，提取结果希望是病症的列表形式"
+  },
+    {
+    "slot": "患者现在的症状",
+    "symptom": "患者现在的症状",
+    "question_type": "text",
+    "priority": 26,
+    "prompt":"患者现在有什么症状吗？",
+    "conditions": [],
+    "structure_format":{"slot":"患者现在的症状","value":"text"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者现在来医院的病症，提取结果希望时病症的列表形式"
+  },
+    
+    
+    {
+    "slot": "患者咳嗽开始时间",
+    "symptom": "患者咳嗽开始时间",
+    "question_type": "datetime",
+    "priority": 27,
+    "prompt":"患者是什么时候开始咳嗽的呢？",
+    "conditions": [{ "slot": "患者现在的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"患者咳嗽开始时间","value":"YYYY-MM-DD"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取出患者咳嗽的开始时间，具体时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述。"
+  },
+    {
+    "slot": "患者的咳嗽频率",
+    "symptom": "患者的咳嗽频率",
+    "question_type": "text",
+    "priority": 28,
+    "prompt":"患者咳嗽得厉害吗？如果症状最轻是0分，症状最严重是10分，你打多少分？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"患者的咳嗽频率","value":"程度（0-10）"},
+    "expectations":"根据患者/患者家属的回答，提取症状的症状程度。"
+  },
+    {
+    "slot": "患者的咳嗽情况",
+    "symptom": "患者的咳嗽情况",
+    "question_type": "text",
+    "priority": 29,
+    "prompt":"患者是一直咳还是偶尔咳？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"患者的咳嗽情况","value":"一直咳/偶尔咳"},
+    "expectations":"根据患者/患者家属的回答，将结果分成两种，一种是一直咳，另外一种是偶尔咳。"
+  },
+    {
+    "slot": "患者咳嗽加重或者减轻情况",
+    "symptom": "患者咳嗽加重或者减轻情况",
+    "question_type": "text",
+    "priority": 30,
+    "prompt":"患者咳嗽有没有在什么情况下加重或减轻？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "咳嗽" }],
+    "structure_format":{"slot":"患者咳嗽加重或者减轻情况","value":"text"},
+    "expectations":"根据患者/患者家属的回答，总结出患者在什么身体活动姿势，或者什么天气，或者吃了什么导致咳嗽加重或者减轻"
+  },
+    {
+        "slot": "患者是否咳痰",
+        "symptom": "患者是否咳痰",
+        "question_type": "yes_no_unknown",
+        "priority": 31,
+        "prompt":"患者请问有咳痰吗？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否咳痰","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属回答，准确提取出患者是否咳痰"
+      },
+    {
+        "slot": "患者痰液的颜色",
+        "symptom": "患者痰液的颜色",
+        "question_type": "text",
+        "priority": 32,
+        "prompt":"患者咳的痰是什么颜色的？",
+        "conditions": [{ "slot": "患者是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"患者痰液的颜色","value":"text"},
+        "expectations":"根据患者/患者家属的回答，描述出患者痰液的颜色，不同原因导致的痰液颜色改变有不同的诊断意义，常见的痰液颜色包括透明或白色、黄色、绿色或黄绿色、棕色或铁锈色、粉色或带血丝、黑色或黑灰色。如果患者不知道痰液的颜色，可以提取结果为不详。"
+      },
+    {
+        "slot": "患者痰液的量",
+        "symptom": "患者痰液的量",
+        "question_type": "text",
+        "priority": 33,
+        "prompt":"患者咳痰的量多吗？",
+        "conditions": [{ "slot": "患者是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"患者痰液的量","value":""},
+        "expectations":"根据患者/患者家属的回答，描述出患者痰液的量，正常情况下，健康人很少有痰，或仅有极少量的透明痰液。如果每天都需要多次、有意识地用力咳嗽来清除喉咙里的痰，比如每隔一小会儿就要清一下嗓子，或者早上起床后需要花很长时间才能把痰咳干净，这就算痰多。少量大约为每天总量少于10毫升（大约相当于2个瓶盖的量）；中等量大约为每天10-150毫升；大量大约为每天超过150毫升（大约相当于一小杯酸奶的量）。如果患者不能准确描述痰液的量，可以提取效果为不详。"
+      },
+    {
+        "slot": "患者痰液是否有血丝",
+        "symptom": "患者痰液是否有血丝",
+        "question_type": "yes_no_unknown",
+        "priority": 34,
+        "prompt":"患者痰里边有没有血丝呢？",
+        "conditions": [{ "slot": "患者是否咳痰","operator": "=","value": "True" }],
+        "structure_format":{"slot":"患者痰液是否有血丝","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，描述出患者痰液是否含有血丝"
+      },
+    {
+        "slot": "患者痰液血丝的量",
+        "symptom": "患者痰液血丝的量",
+        "question_type": "text",
+        "priority": 35,
+        "prompt":"患者痰里面的血丝多不多呢？",
+        "conditions": [{ "slot": "患者痰液是否有血丝","operator": "=","value": "True" }],
+        "structure_format":{"slot":"患者痰液血丝的量","value":"多/少"},
+        "expectations":"根据患者/患者家属回答，描述出患者痰液血丝量是否多或者少。如果患者未能清楚描述痰液的血丝量，提取结果为不详。"
+      },
+
+
+
+
+    {
+    "slot": "患者胸痛开始时间",
+    "symptom": "患者胸痛开始时间",
+    "question_type": "datetime",
+    "priority": 36,
+    "prompt":"患者胸痛是什么时候开始的呢？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"患者胸痛开始时间","value":"YYYY-MM-DD"},
+    "expectations":"根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+  },
+    {
+    "slot": "患者胸痛具体部位",
+    "symptom": "患者胸痛具体部位",
+    "question_type": "text",
+    "priority": 37,
+    "prompt":"患者胸痛的具体部位是哪里呢？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"患者胸痛具体部位","value":""},
+    "expectations":"根据患者/患者家属的回答，尽可能提取患者胸痛的部位，希望提取结果是一个列表，左/右/两侧的肩/背/腰/胸壁/胸内"
+  },
+    {
+    "slot": "患者其他部位疼痛",
+    "symptom": "患者其他部位疼痛",
+    "question_type": "text",
+    "priority": 38,
+    "prompt":"患者还有其他部位痛吗？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"患者其他部位疼痛","value":""},
+    "expectations":"根据患者/患者家属的回答，尽可能提取患者其他痛的部位，希望提取结果是一个列表"
+  },
+    {
+    "slot": "患者胸痛类型",
+    "symptom": "患者胸痛类型",
+    "question_type": "text",
+    "priority": 39,
+    "prompt":"患者胸痛是什么样的疼痛呢？是牵扯痛、针刺样痛、钝痛、还是隐隐作痛？",
+    "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+    "structure_format":{"slot":"患者胸痛类型","value":""},
+    "expectations":"根据患者/患者家属的回答，尽可能提取患者胸痛的类型，一般是针刺样痛、钝痛、隐隐作痛"
+  },
+    {
+        "slot": "患者胸痛程度",
+        "symptom": "患者胸痛程度",
+        "question_type": "text",
+        "priority": 40,
+        "prompt":"患者疼痛的程度怎么样呢？是否剧烈呢？如果症状最轻是0分，症状最严重是10分，你打多少分？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"患者胸痛程度","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者对胸痛程度的打分，如5分等。"
+      },
+    {
+        "slot": "患者胸痛发作频率",
+        "symptom": "患者胸痛发作频率",
+        "question_type": "text",
+        "priority": 41,
+        "prompt":"患者胸痛发作的频率大概是怎样的呢？是一直痛吗，还是一阵一阵的？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"患者胸痛发作频率","value":"一直痛/一阵一阵痛"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者胸痛的发作频率，一般是一直痛，一阵一阵痛。"
+      },
+    {
+        "slot": "患者活动后胸痛程度",
+        "symptom": "患者活动后胸痛程度",
+        "question_type": "text",
+        "priority": 42,
+        "prompt":"患者活动或运动后胸痛会加重吗？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"患者活动后胸痛程度","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者活动后胸痛程度是加重还是减轻。"
+      },
+    {
+        "slot": "患者休息后胸痛程度",
+        "symptom": "患者休息后胸痛程度",
+        "question_type": "text",
+        "priority": 43,
+        "prompt":"患者休息后胸痛会缓解吗？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "胸痛" }],
+        "structure_format":{"slot":"患者休息后胸痛程度","value":"缓解/没有缓解"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者休息后胸痛是缓解还是没有缓解。"
+      },
+
+
+    {
+        "slot": "患者呼吸困难开始时间",
+        "symptom": "患者呼吸困难开始时间",
+        "question_type": "datetime",
+        "priority": 44,
+        "prompt":"患者气紧是什么时候开始的呢？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"患者呼吸困难开始时间","value":"YYYY-MM-DD"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+      },
+    {
+        "slot": "患者气紧情况时间",
+        "symptom": "患者气紧情况时间",
+        "question_type": "datetime",
+        "priority": 45,
+        "prompt":"患者什么时候会出现气紧呢？",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"患者气紧情况时间","value":"YYYY-MM-DD"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取时间，如果是1年内，需要精确到月；如果是1月内，需要精确到天。允许xxx多天，xxx多月的表述.对于日期，如果没有年月日的完整描述，可以适当追问。"
+      },
+    {
+        "slot": "患者气紧减轻情况",
+        "symptom": "患者气紧减轻情况",
+        "question_type": "text",
+        "priority": 46,
+        "prompt":"患者有没有什么情况下会减轻？比如什么天气，什么饮食或者什么身体姿势。",
+        "conditions": [{ "slot": "患者发现结节时的症状", "operator": "contains", "value": "呼吸困难" }],
+        "structure_format":{"slot":"患者气紧减轻情况","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者在什么天气影响，什么饮食，什么身体姿势可以让气紧减轻。"
+      },
+
+
+{
+        "slot": "患者是否咯血",
+        "symptom": "患者是否咯血",
+        "question_type": "yes_no_unknown",
+        "priority": 47,
+        "prompt":"患者有咯血吗？",
+        "conditions": [],
+        "structure_format":{"slot":"患者是否咯血","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者是否咯血。"
+      },
+{
+        "slot": "患者精神状态变化",
+        "symptom": "患者精神状态变化",
+        "question_type": "text",
+        "priority": 48,
+        "prompt":"从发现肺结节以来，患者的精神状态好不好呢？",
+        "conditions": [],
+        "structure_format":{"slot":"患者精神状态变化","value":"良好/尚可/不佳"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者精神状态变化。"
+      },
+    {
+        "slot": "患者食欲状态变化",
+        "symptom": "患者食欲状态变化",
+        "question_type": "text",
+        "priority": 49,
+        "prompt":"患者发现结节后食欲有没有影响呢？",
+        "conditions": [],
+        "structure_format":{"slot":"患者食欲状态变化","value":"良好/尚可/不佳/无"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者食欲变化。"
+      },
+    {
+        "slot": "患者睡眠状态变化",
+        "symptom": "患者睡眠状态变化",
+        "question_type": "text",
+        "priority": 50,
+        "prompt":"患者发现结节后睡眠有没有影响呢？",
+        "conditions": [],
+        "structure_format":{"slot":"患者睡眠状态变化","value":"良好/尚可/不佳/无"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者睡眠状态变化。"
+      },
+    {
+        "slot": "患者大便状态是否有问题",
+        "symptom": "患者大便状态是否有问题",
+        "question_type": "yes_no_unknown",
+        "priority": 51,
+        "prompt":"患者近期大便有没有什么问题呢？",
+        "conditions": [],
+        "structure_format":{"slot":"患者大便状态是否有问题","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者大便状态是否有问题。"
+      },
+    {
+        "slot": "患者大便颜色",
+        "symptom": "患者大便颜色",
+        "question_type": "text",
+        "priority": 52,
+        "prompt":"患者大便的颜色如何？",
+        "conditions": [{ "slot": "患者大便状态是否有问题", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者大便颜色","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者的大便颜色情况。"
+      },
+    {
+        "slot": "患者大便形状",
+        "symptom": "患者大便形状",
+        "question_type": "text",
+        "priority": 53,
+        "prompt":"患者大便的形状如何？",
+        "conditions": [{ "slot": "患者大便状态是否有问题", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者大便形状","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者的大便形状情况。"
+      },
+    {
+        "slot": "患者小便状态是否有问题",
+        "symptom": "患者小便状态是否有问题",
+        "question_type": "yes_no_known",
+        "priority": 54,
+        "prompt":"患者近期小便有没有什么问题呢？",
+        "conditions": [],
+        "structure_format":{"slot":"患者小便状态是否有问题","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者的小便状态是否有问题。"
+      },
+    {
+        "slot": "患者是否存在尿频",
+        "symptom": "患者是否存在尿频",
+        "question_type": "yes_no_known",
+        "priority": 55,
+        "prompt":"患者有尿频吗？",
+        "conditions": [{ "slot": "患者小便状态是否有问题", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者是否存在尿频","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者是否存在尿频问题。"
+      },
+    {
+        "slot": "患者是否存在尿急",
+        "symptom": "患者是否存在尿急",
+        "question_type": "yes_no_known",
+        "priority": 56,
+        "prompt":"患者有尿急吗？",
+        "conditions": [{ "slot": "患者小便状态是否有问题", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者是否存在尿急","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者是否存在尿急问题。"
+      },
+    {
+        "slot": "患者是否存在尿痛",
+        "symptom": "患者是否存在尿痛",
+        "question_type": "yes_no_known",
+        "priority": 57,
+        "prompt":"患者有尿痛吗？",
+        "conditions": [{ "slot": "患者小便状态是否有问题", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者是否存在尿痛","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者是否存在尿痛问题。"
+      },
+    {
+        "slot": "患者体重是否有明显变化",
+        "symptom": "患者体重是否有明显变化",
+        "question_type": "yes_no_known",
+        "priority": 58,
+        "prompt":"患者近期体重有没有明显的变化？",
+        "conditions": [],
+        "structure_format":{"slot":"患者体重是否有明显变化","value":"True/False/Unknown"},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者是否存在体重明显变化情况。"
+      },
+    {
+        "slot": "患者体重变化情况",
+        "symptom": "患者体重变化情况",
+        "question_type": "number",
+        "priority": 59,
+        "prompt":"患者具体上升或者下降了多少kg？",
+        "conditions": [{ "slot": "患者体重是否有明显变化", "operator": "=", "value": "True" }],
+        "structure_format":{"slot":"患者体重变化情况","value":""},
+        "expectations":"根据患者/患者家属的回答，尽可能提取患者体重变化，上升多少千克或者下降多少千克。"
+      }
+]
